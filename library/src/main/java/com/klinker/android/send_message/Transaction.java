@@ -653,13 +653,13 @@ public class Transaction {
             File mSendFile = new File(context.getCacheDir(), fileName);
 
             SendReq sendReq = buildPdu(context, fromAddress, addresses, subject, parts);
-            Uri messageUri;
+            Uri messageUri = null;
             if (save) {
                 // this will be the default behavior if we do not explicitly set the save flag to false
                 PduPersister persister = PduPersister.getPduPersister(context);
                 messageUri = persister.persist(sendReq, Uri.parse("content://mms/outbox"),
                         true, settings.getGroup(), null, settings.getSubscriptionId());
-            } else {
+            } else if (existingMessageUri != null) {
                 messageUri = existingMessageUri;
                 Log.v(TAG, messageUri.toString());
 
@@ -679,7 +679,9 @@ public class Transaction {
                 intent = explicitSentMmsReceiver;
             }
 
-            intent.putExtra(MmsSentReceiver.EXTRA_CONTENT_URI, messageUri.toString());
+            if (messageUri != null) {
+                intent.putExtra(MmsSentReceiver.EXTRA_CONTENT_URI, messageUri.toString());
+            }
             intent.putExtra(MmsSentReceiver.EXTRA_FILE_PATH, mSendFile.getPath());
             final PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
