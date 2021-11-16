@@ -37,6 +37,8 @@ import com.android.mms.service_alt.MmsRequestManager;
 import com.android.mms.service_alt.SendRequest;
 import com.google.android.mms.util_alt.SqliteWrapper;
 import com.klinker.android.logger.Log;
+
+import android.util.Patterns;
 import android.widget.Toast;
 import com.android.mms.dom.smil.parser.SmilXmlSerializer;
 import com.android.mms.transaction.MmsMessageSender;
@@ -968,6 +970,7 @@ public class Transaction {
                 (message.getParts().size() != 0) ||
                 (settings.getSendLongAsMms() && Utils.getNumPages(settings, message.getText()) > settings.getSendLongAsMmsAfter()) ||
                 (message.getAddresses().length > 1 && settings.getGroup()) ||
+                (message.getAddresses().length == 1 && Patterns.EMAIL_ADDRESS.matcher(message.getAddresses()[0]).matches()) ||
                 message.getSubject() != null;
     }
 
