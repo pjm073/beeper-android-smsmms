@@ -86,6 +86,7 @@ public class Transaction {
     public static final String MMS_PROGRESS = "com.klinker.android.send_message.MMS_PROGRESS";
     public static final String NOTIFY_OF_DELIVERY = "com.klinker.android.send_message.NOTIFY_DELIVERY";
     public static final String NOTIFY_OF_MMS = "com.klinker.android.messaging.NEW_MMS_DOWNLOADED";
+    public static final String COMMAND_ID = "com.beeper.sms.COMMAND_ID";
 
     public static final long NO_THREAD_ID = 0;
 
@@ -254,6 +255,9 @@ public class Transaction {
                         messageId = query.getInt(0);
                     }
                     query.close();
+                }
+                if (messageId == 0 && sentMessageParcelable instanceof Bundle) {
+                    messageId = ((Bundle) sentMessageParcelable).getInt(COMMAND_ID, 0);
                 }
 
                 Log.v("send_transaction", "message id: " + messageId);
