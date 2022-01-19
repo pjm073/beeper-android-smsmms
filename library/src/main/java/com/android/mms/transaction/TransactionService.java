@@ -663,6 +663,8 @@ public class TransactionService extends Service implements Observer {
     }
 
     protected int beginMmsConnectivity() throws IOException {
+        throw new RuntimeException("Not supported");
+        /*
         if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
             Log.v(TAG, "beginMmsConnectivity");
         }
@@ -692,9 +694,12 @@ public class TransactionService extends Service implements Observer {
         }
 
         throw new IOException("Cannot establish MMS connectivity");
+         */
     }
 
     protected void endMmsConnectivity() {
+        throw new RuntimeException("Not supported");
+        /*
         try {
             if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
                 Log.v(TAG, "endMmsConnectivity");
@@ -710,6 +715,7 @@ public class TransactionService extends Service implements Observer {
         } finally {
             releaseWakeLock();
         }
+         */
     }
 
     private final class ServiceHandler extends Handler {

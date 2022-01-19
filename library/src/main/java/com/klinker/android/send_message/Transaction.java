@@ -273,8 +273,11 @@ public class Transaction {
 
                 sentIntent.putExtra("message_uri", messageUri == null ? "" : messageUri.toString());
                 sentIntent.putExtra(SENT_SMS_BUNDLE, sentMessageParcelable);
+                int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                        : PendingIntent.FLAG_UPDATE_CURRENT;
                 PendingIntent sentPI = PendingIntent.getBroadcast(
-                        context, messageId, sentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        context, messageId, sentIntent, flags);
 
                 Intent deliveredIntent;
                 if (explicitDeliveredSmsReceiver == null) {
@@ -287,7 +290,7 @@ public class Transaction {
                 deliveredIntent.putExtra("message_uri", messageUri == null ? "" : messageUri.toString());
                 deliveredIntent.putExtra(DELIVERED_SMS_BUNDLE, deliveredParcelable);
                 PendingIntent deliveredPI = PendingIntent.getBroadcast(
-                        context, messageId, deliveredIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        context, messageId, deliveredIntent, flags);
 
                 ArrayList<PendingIntent> sPI = new ArrayList<PendingIntent>();
                 ArrayList<PendingIntent> dPI = new ArrayList<PendingIntent>();
@@ -693,8 +696,11 @@ public class Transaction {
             }
             intent.putExtra(MmsSentReceiver.EXTRA_FILE_PATH, mSendFile.getPath());
             intent.putExtra(SENT_MMS_BUNDLE, sentMessageParcelable);
+            int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    ? PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                    : PendingIntent.FLAG_CANCEL_CURRENT;
             final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    context, 0, intent, flags);
 
             Uri writerUri = (new Uri.Builder())
                     .authority(context.getPackageName() + ".MmsFileProvider")
